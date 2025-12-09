@@ -11,10 +11,53 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-import { ChevronDown, ChevronRight } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  LayoutDashboard,
+  Calendar,
+  FileText,
+  ClipboardList,
+  User,
+  Stethoscope,
+  Pill,
+  Microscope,
+  FileBarChart,
+  Settings,
+  Users,
+  CreditCard,
+  CalendarCheck,
+  Receipt,
+  Activity
+} from "lucide-react";
 
 import { useMenuData } from "@/hooks/useMenuData";
 import { getUser } from "@/api/getUser";
+
+// Function to get icon component for menu
+const getMenuIcon = (menuName) => {
+  const iconMap = {
+    'Dashboard': LayoutDashboard,
+    'Appointment': Calendar,
+    'Invoice': FileText,
+    'Enquiry': ClipboardList,
+    'Patient': User,
+    'Doctor': Stethoscope,
+    'Medicine': Pill,
+    'Lab': Microscope,
+    'Report': FileBarChart,
+    'Settings': Settings,
+    'User': Users,
+    'Users': Users,
+    'Payment': CreditCard,
+    'Schedule': CalendarCheck,
+    'Billing': Receipt,
+    'Pharmacy': Activity,
+  };
+
+  const IconComponent = iconMap[menuName] || Activity;
+  return <IconComponent size={18} strokeWidth={2} />;
+};
 
 export default function Sidebar({ open }) {
   let userDetails = getUser();
@@ -29,6 +72,20 @@ export default function Sidebar({ open }) {
       ...prev,
       [menuID]: !prev[menuID],
     }));
+  };
+
+   // Add Doctor menu
+  const doctorMenu = {
+    menuID: 'doctor-menu',
+    menuName: 'Doctor',
+    menuPath: null,
+    menuChild: [
+      {
+        menuID: 'doctor-registration',
+        menuName: 'Doctor Registration',
+        menuPath: '/doctor/doctor-registration'
+      }
+    ]
   };
 
   // Add Appointment menu
@@ -78,8 +135,22 @@ export default function Sidebar({ open }) {
     ]
   };
 
-  // Append Appointment, Invoice, and Enquiry menus to the data
-  const menuData = data ? [...data, appointmentMenu, invoiceMenu, enquiryMenu] : [appointmentMenu, invoiceMenu, enquiryMenu];
+  // // Add Doctor menu
+  // const doctorMenu = {
+  //   menuID: 'doctor-menu',
+  //   menuName: 'Doctor',
+  //   menuPath: null,
+  //   menuChild: [
+  //     {
+  //       menuID: 'doctor-registration',
+  //       menuName: 'Doctor Registration',
+  //       menuPath: '/doctor/doctor-registration'
+  //     }
+  //   ]
+  // };
+
+  // Append Appointment, Invoice, Enquiry, and Doctor menus to the data
+  const menuData = data ? [...data,  doctorMenu,appointmentMenu , enquiryMenu , invoiceMenu] : [ doctorMenu, appointmentMenu, enquiryMenu, invoiceMenu];
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -109,15 +180,15 @@ export default function Sidebar({ open }) {
                 key={menu.menuID}
                 href={menu.menuPath || "#"}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground transition-colors",
+                  "flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-[#4DB8AC]/10 hover:text-[#1E6B8C] transition-all duration-200",
                   open ? "justify-start" : "justify-center"
                 )}
               >
-                <div className="w-6 h-6 flex items-center justify-center rounded bg-[#4DB8AC] text-white text-xs">
-                  {menu.menuName?.charAt(0)}
+                <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#4DB8AC] to-[#1E6B8C] text-white shadow-md">
+                  {getMenuIcon(menu.menuName)}
                 </div>
 
-                {open && <span>{menu.menuName}</span>}
+                {open && <span className="font-medium">{menu.menuName}</span>}
               </Link>
             );
           }
@@ -132,11 +203,11 @@ export default function Sidebar({ open }) {
               <CollapsibleTrigger asChild>
                 <button
                   className={cn(
-                    "w-full flex items-center gap-3 px-4 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors text-left"
+                    "w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-[#4DB8AC]/10 hover:text-[#1E6B8C] transition-all duration-200 text-left"
                   )}
                 >
-                  <div className="w-6 h-6 flex items-center justify-center rounded bg-[#4DB8AC] text-white text-xs dark:bg-[#1E6B8C]">
-                    {menu.menuName?.charAt(0)}
+                  <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#4DB8AC] to-[#1E6B8C] text-white shadow-md">
+                    {getMenuIcon(menu.menuName)}
                   </div>
 
                   {open && (
@@ -155,13 +226,13 @@ export default function Sidebar({ open }) {
               </CollapsibleTrigger>
 
               <CollapsibleContent>
-                <div className="ml-8 mt-1 flex flex-col space-y-1">
+                <div className="ml-12 mt-1 flex flex-col space-y-0.5">
                   {menu.menuChild.map((child, i) => (
                     <Link
                       key={child.menuID}
                       href={child.menuPath || "#"}
                       className={cn(
-                        "text-sm rounded-md px-3 py-1.5 hover:bg-accent hover:text-accent-foreground transition-colors",
+                        "text-sm rounded-md px-4 py-2 hover:bg-[#4DB8AC]/10 hover:text-[#1E6B8C] transition-all duration-200 border-l-2 border-transparent hover:border-[#4DB8AC]",
                         !open && "hidden"
                       )}
                     >

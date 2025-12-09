@@ -21,13 +21,13 @@ export default function AddEnquiryFormPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    enquiryNo: "E167312",
-    enquiryDate: "05-12-2025",
+    enquiryNo: "",
+    enquiryDate: "",
     firstName: "",
     lastName: "",
     dateOfBirth: "",
     age: "",
-    gender: "male",
+    gender: "",
     email: "",
     address: "",
     area: "",
@@ -173,7 +173,7 @@ export default function AddEnquiryFormPage() {
 
             {/* Row 4: Gender and Email */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
+              <div className="space-y-2"> 
                 <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Gender
                 </Label>
